@@ -1,5 +1,10 @@
 function launchOrFocusApp(appName)
-    hs.application.launchOrFocus(appName)
+    local app = hs.application.get(appName)
+    if app then
+        app:activate() -- focus the app if it's running
+    else
+        hs.application.launchOrFocus(appName) -- otherwise, start the app
+    end
 end
 
 hs.hotkey.bind({"ctrl"}, "'", function()
@@ -7,24 +12,23 @@ hs.hotkey.bind({"ctrl"}, "'", function()
 end)
 
 hs.hotkey.bind({"cmd"}, "1", function()
-    launchOrFocusApp("Visual Studio Code - Insiders")
+    launchOrFocusApp("Google Chrome")
+end)
+
+hs.hotkey.bind({"cmd", "ctrl"}, "1", function()
+    launchOrFocusApp("Visual Studio Code")
 end)
 
 hs.hotkey.bind({"cmd"}, "2", function()
     launchOrFocusApp("Arc")
 end)
 
-hs.hotkey.bind({"cmd", "ctrl"}, "2", function()
-    launchOrFocusApp("Google Chrome")
-end)
-
 hs.hotkey.bind({"cmd"}, "3", function()
-    launchOrFocusApp("Slack")
+    launchOrFocusApp("Gather")
 end)
 
 hs.hotkey.bind({"cmd", "ctrl"}, "3", function()
-    launchOrFocusApp("Discord")
-
+    launchOrFocusApp("Slack")
 end)
 
 hs.hotkey.bind({"cmd"}, "4", function()
@@ -36,5 +40,9 @@ hs.hotkey.bind({"cmd"}, "5", function()
 end)
 
 hs.hotkey.bind({"cmd"}, "6", function()
-    launchOrFocusApp("Notion")
+    launchOrFocusApp("Postman")
+end)
+
+hs.hotkey.bind({"cmd"}, "7", function()
+    launchOrFocusApp("Datagrip")
 end)

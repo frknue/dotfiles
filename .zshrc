@@ -5,6 +5,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -110,17 +111,41 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+bindkey "\e\e[D" backward-word
+bindkey "\e\e[C" forward-word
 
 alias nv='nvim'
+alias lv='lvim'
 alias g='git'
 alias tm='tmux'
-alias lv='lvim'
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# git commands
+alias gaa='git add --all'
+alias gcm='git commit -m'
+alias gpl='git pull'
+alias gps='git push'
+alias gco='git checkout'
+alias gbr='git branch'
+alias gdf='git diff'
+alias gst='git status'
 
+# bun completions
+[ -s "/Users/furkan/.bun/_bun" ] && source "/Users/furkan/.bun/_bun"
 
-export PATH="/Users/frknue/.local/bin:$PATH"
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
+export MODULAR_HOME="$HOME/.modular"
+export PATH="$MODULAR_HOME/pkg/packages.modular.com_mojo/bin:$PATH"
 
+# pnpm
+export PNPM_HOME="/Users/furkan/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+#
+# LunarVim
+export PATH="$PATH:/Users/furkan/.local/bin"
