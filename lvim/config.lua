@@ -1,13 +1,21 @@
 vim.opt.relativenumber = true -- relative line numbers
+vim.o.background = 'dark'
 lvim.transparent_window = true
 lvim.format_on_save.enabled = true
--- lvim.colorscheme = "desert"
+lvim.colorscheme = "gruvbox"
 lvim.builtin.bufferline.active = false
 
 -- Keymaps --
 lvim.builtin.which_key.mappings["p"] = nil
 vim.keymap.set("i", "jk", "<Esc>")
 lvim.keys.normal_mode["<leader>pp"] = ":e#<cr>"
+lvim.keys.normal_mode["<leader>zp"] = ":Centerpad<CR>"
+lvim.keys.normal_mode["<leader>mp"] = ":MarkdownPreview<CR>"
+
+-- Show line diagnostics
+lvim.keys.normal_mode["<leader>d"] = function()
+  vim.diagnostic.open_float(nil, { scope = "cursor" })
+end
 
 -- Split Windows
 lvim.keys.normal_mode["|"] = ":vsplit<CR>"
@@ -15,17 +23,43 @@ lvim.keys.normal_mode["-"] = ":split<CR>"
 
 lvim.keys.normal_mode["gt"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["gT"] = ":BufferLineCyclePrev<CR>"
--- Keymaps --
 
 -- jump 10 lines up/down with arrow keys
 vim.keymap.set("n", "<up>", "10k", { desc = "Jump 10 lines up" })
 vim.keymap.set("n", "<down>", "10j", { desc = "Jump 10 lines down" })
 vim.keymap.set("v", "<up>", "10k", { desc = "Jump 10 lines up" })
 vim.keymap.set("v", "<down>", "10j", { desc = "Jump 10 lines down" })
+
+
 -- Keymaps --
 
 -- Plugins
 lvim.plugins = {
+  -- {
+  --   "f-person/git-blame.nvim",
+  --   event = "BufRead",
+  --   config = function()
+  --     vim.cmd "highlight default link gitblame SpecialComment"
+  --     vim.g.gitblame_enabled = 0
+  --   end,
+  -- },
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function() vim.fn["mkdp#util#install"]() end,
+  },
+  {
+    'smithbm2316/centerpad.nvim'
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({})
+    end,
+  },
   -- NeoScroll
   {
     "karb94/neoscroll.nvim",
@@ -54,7 +88,24 @@ lvim.plugins = {
       vim.cmd([[colorscheme gruvbox]])
     end,
   },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 }
+
+lvim.builtin.bigfile.config = {
+  filesize = 2,      -- size of the file in MiB, the plugin round file sizes to the closest MiB
+  pattern = { "*" }, -- autocmd pattern or function see <### Overriding the detection of big files>
+  features = {       -- features to disable
+    "indent_blankline",
+    "illuminate",
+    "lsp",
+    "treesitter",
+    "syntax",
+    "matchparen",
+    "vimopts",
+    "filetype",
+  },
+}
+
 -- NVIM TREE
 lvim.builtin.nvimtree.setup.view = {
   relativenumber = true,
@@ -92,8 +143,7 @@ lvim.builtin.telescope.defaults.mappings.i = {
   ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist, -- send selected to quickfixlist
 }
 -- Telescope
---
--- Plugins
+
 -- Copilot
 table.insert(lvim.plugins, {
   "zbirenbaum/copilot-cmp",
@@ -107,6 +157,24 @@ table.insert(lvim.plugins, {
   end,
 })
 -- Copilot --
+
+
+table.insert(lvim.plugins, { "bluz71/vim-nightfly-colors", name = "nightfly", lazy = false, priority = 1000 })
+
+table.insert(lvim.plugins, {
+  "ThePrimeagen/harpoon",
+  lazy = false,
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+  },
+  config = true,
+  keys = {
+    { "<leader>hm", "<cmd>lua require('harpoon.mark').add_file()<cr>",        desc = "Mark file with harpoon" },
+    { "<leader>hn", "<cmd>lua require('harpoon.ui').nav_next()<cr>",          desc = "Go to next harpoon mark" },
+    { "<leader>hp", "<cmd>lua require('harpoon.ui').nav_prev()<cr>",          desc = "Go to previous harpoon mark" },
+    { "<leader>ha", "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", desc = "Show harpoon marks" },
+  },
+})
 
 table.insert(lvim.plugins, {
   "aserowy/tmux.nvim",
@@ -170,7 +238,10 @@ table.insert(lvim.plugins, {
   end
 })
 
+-- Plugins
+
 -- Linters / Formatters
+
 local linters = require("lvim.lsp.null-ls.linters")
 linters.setup({
   { command = "eslint", filetypes = { "typescript", "typescriptreact" } },
