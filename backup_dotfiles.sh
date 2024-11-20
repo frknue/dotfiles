@@ -7,7 +7,7 @@ DEST_DIR="$HOME/git/dotfiles"
 mkdir -p "$DEST_DIR"
 
 # List of individual dotfiles to copy
-DOTFILES=(.tmux.conf .zshrc .alacritty.yml)
+DOTFILES=(.tmux.conf .zshrc)
 
 # Copy each individual dotfile
 for file in "${DOTFILES[@]}"; do
@@ -20,7 +20,7 @@ for file in "${DOTFILES[@]}"; do
 done
 
 # Directories to copy
-DIRECTORIES=(.hammerspoon .config/lvim)
+DIRECTORIES=(.config/lvim .config/alacritty)
 
 # Copy each directory
 for dir in "${DIRECTORIES[@]}"; do
